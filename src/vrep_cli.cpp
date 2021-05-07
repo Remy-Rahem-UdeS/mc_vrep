@@ -160,6 +160,16 @@ void VREPCLI::run()
         std::cerr << "Failed to invoke the previous command" << std::endl;
       }
     }
+    else if(token == "open" || token == "o")
+    {
+      std::stringstream args;
+      open_grippers(this->controller, this->vrep, args);
+    }
+    else if(token == "close" || token == "c")
+    {
+      std::stringstream args;
+      close_grippers(this->controller, this->vrep, args);
+    }
     else
     {
       std::cerr << "Unkwown command " << token << std::endl;
