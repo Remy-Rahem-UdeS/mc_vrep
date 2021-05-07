@@ -36,4 +36,5 @@ private:
   bool done_ = false;
   bool next_ = false;
   bool stepByStep_ = false;
+  std::map<std::string, double> externalForce_{{"fx", 0.0}, {"fy", 0.0}, {"fz", 0.0}, {"cx", 0.0}, {"cy", 0.0}, {"cz", 0.0}};
 };

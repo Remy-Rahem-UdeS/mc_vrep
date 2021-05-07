@@ -76,6 +76,9 @@ bool set_external_force(mc_control::MCGlobalController &, VREPSimulation & vrep,
   std::string body;
   double fx, fy, fz, cx, cy, cz;
   args >> body >> cx >> cy >> cz >> fx >> fy >> fz;
+  std::cout << "External force (body): " << body << std::endl;
+  std::cout << "External force (force): [" << fx << ", " << fy << ", " << fz << "]" << std::endl;
+  std::cout << "External force (couple): [" << cx << ", " << cy << ", " << cz << "]" << std::endl;
   sva::ForceVecd f(Eigen::Vector3d{cx, cy, cz}, Eigen::Vector3d{fx, fy, fz});
   return vrep.setExternalForce(body, f);
 }
@@ -163,18 +166,126 @@ void VREPCLI::run()
     else if(token == "force" || token == "f")
     {
       // Forces to be applied
-      double fx = -5.0, fy = 0.0, fz = 0.0, cx = 0.0, cy = 0.0, cz = 0.0;
+      if (ss.rdbuf()->in_avail() > 1)
+      {
+        ss >> externalForce_["fx"];
+        if (ss.rdbuf()->in_avail() > 1)
+        {
+          ss >> externalForce_["fy"];
+          if (ss.rdbuf()->in_avail() > 1)
+          {
+            ss >> externalForce_["fz"];
+            if (ss.rdbuf()->in_avail() > 1)
+            {
+              ss >> externalForce_["cx"];
+              if (ss.rdbuf()->in_avail() > 1)
+              {
+                ss >> externalForce_["cy"];
+                if (ss.rdbuf()->in_avail() > 1)
+                {
+                  ss >> externalForce_["cz"];
+                }
+              }
+            }
+          }
+        }
+      }
+      else
+      {
+        externalForce_["fx"] = -2.5;
+        externalForce_["fy"] = -2.5;
+      }
 
       std::stringstream args;
       // Body on which the forces will be applied
       std::string body = "l_wrist_respondable";
-      args << body << ' ' << cx << ' ' << cy << ' ' << cz << ' ' << fx << ' ' << fy << ' ' << fz;
+      args << body << ' ' << externalForce_["cx"] << ' ' << externalForce_["cy"] << ' ' << externalForce_["cz"] << ' ' << externalForce_["fx"] << ' ' << externalForce_["fy"] << ' ' << externalForce_["fz"];
       set_external_force(controller, vrep, args);
 
       std::stringstream().swap(args);
       body = "r_wrist_respondable";
-      args << body << ' ' << cx << ' ' << cy << ' ' << cz << ' ' << fx << ' ' << fy << ' ' << fz;
+      args << body << ' ' << externalForce_["cx"] << ' ' << externalForce_["cy"] << ' ' << externalForce_["cz"] << ' ' << externalForce_["fx"] << ' ' << externalForce_["fy"] << ' ' << externalForce_["fz"];
       set_external_force(this->controller, this->vrep, args);
+    }
+    else if(token == "force_x" || token == "fx")
+    {
+      // Forces to be applied
+      if (ss.rdbuf()->in_avail() > 1)
+      {
+        ss >> externalForce_["fx"];
+        if (ss.rdbuf()->in_avail() > 1)
+        {
+          ss >> externalForce_["cx"];
+        }
+      }
+      else
+      {
+        externalForce_["fx"] = -2.5;
+      }
+
+      std::stringstream args;
+      // Body on which the forces will be applied
+      std::string body = "l_wrist_respondable";
+      args << body << ' ' << externalForce_["cx"] << ' ' << externalForce_["cy"] << ' ' << externalForce_["cz"] << ' ' << externalForce_["fx"] << ' ' << externalForce_["fy"] << ' ' << externalForce_["fz"];
+      set_external_force(controller, vrep, args);
+
+      std::stringstream().swap(args);
+      body = "r_wrist_respondable";
+      args << body << ' ' << externalForce_["cx"] << ' ' << externalForce_["cy"] << ' ' << externalForce_["cz"] << ' ' << externalForce_["fx"] << ' ' << externalForce_["fy"] << ' ' << externalForce_["fz"];
+      set_external_force(this->controller, this->vrep, args);
+    }
+    else if(token == "force_y" || token == "fy")
+    {
+      // Forces to be applied
+      if (ss.rdbuf()->in_avail() > 1)
+      {
+        ss >> externalForce_["fy"];
+        if (ss.rdbuf()->in_avail() > 1)
+        {
+          ss >> externalForce_["cy"];
+        }
+      }
+      else
+      {
+        externalForce_["fy"] = -2.5;
+      }
+
+      std::stringstream args;
+      // Body on which the forces will be applied
+      std::string body = "l_wrist_respondable";
+      args << body << ' ' << externalForce_["cx"] << ' ' << externalForce_["cy"] << ' ' << externalForce_["cz"] << ' ' << externalForce_["fx"] << ' ' << externalForce_["fy"] << ' ' << externalForce_["fz"];
+      set_external_force(controller, vrep, args);
+
+      std::stringstream().swap(args);
+      body = "r_wrist_respondable";
+      args << body << ' ' << externalForce_["cx"] << ' ' << externalForce_["cy"] << ' ' << externalForce_["cz"] << ' ' << externalForce_["fx"] << ' ' << externalForce_["fy"] << ' ' << externalForce_["fz"];
+      set_external_force(this->controller, this->vrep, args);
+    }
+    else if(token == "force_z" || token == "fz")
+    {
+      // Forces to be applied
+      if (ss.rdbuf()->in_avail() > 1)
+      {
+        ss >> externalForce_["fz"];
+        if (ss.rdbuf()->in_avail() > 1)
+        {
+          ss >> externalForce_["cz"];
+        }
+        std::stringstream args;
+        // Body on which the forces will be applied
+        std::string body = "l_wrist_respondable";
+        args << body << ' ' << externalForce_["cx"] << ' ' << externalForce_["cy"] << ' ' << externalForce_["cz"] << ' ' << externalForce_["fx"] << ' ' << externalForce_["fy"] << ' ' << externalForce_["fz"];
+        set_external_force(controller, vrep, args);
+
+        std::stringstream().swap(args);
+        body = "r_wrist_respondable";
+        args << body << ' ' << externalForce_["cx"] << ' ' << externalForce_["cy"] << ' ' << externalForce_["cz"] << ' ' << externalForce_["fx"] << ' ' << externalForce_["fy"] << ' ' << externalForce_["fz"];
+        set_external_force(this->controller, this->vrep, args);
+      }
+      else
+      {
+        std::cout << "Usage: " << token << "fz [cz]" << std::endl;
+      }
     }
     else if(token == "open" || token == "o")
     {
