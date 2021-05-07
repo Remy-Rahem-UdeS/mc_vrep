@@ -160,6 +160,22 @@ void VREPCLI::run()
         std::cerr << "Failed to invoke the previous command" << std::endl;
       }
     }
+    else if(token == "force" || token == "f")
+    {
+      // Forces to be applied
+      double fx = -5.0, fy = 0.0, fz = 0.0, cx = 0.0, cy = 0.0, cz = 0.0;
+
+      std::stringstream args;
+      // Body on which the forces will be applied
+      std::string body = "l_wrist_respondable";
+      args << body << ' ' << cx << ' ' << cy << ' ' << cz << ' ' << fx << ' ' << fy << ' ' << fz;
+      set_external_force(controller, vrep, args);
+
+      std::stringstream().swap(args);
+      body = "r_wrist_respondable";
+      args << body << ' ' << cx << ' ' << cy << ' ' << cz << ' ' << fx << ' ' << fy << ' ' << fz;
+      set_external_force(this->controller, this->vrep, args);
+    }
     else if(token == "open" || token == "o")
     {
       std::stringstream args;
